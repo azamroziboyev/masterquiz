@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterQuiz Bot Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap me-2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                MasterQuiz Bot
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#users">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#tests">Tests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#referrals">Referrals</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-dark border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="card-title">MasterQuiz Bot Statistics</h2>
+                        <p class="card-text">
+                            Real-time statistics and analytics for the MasterQuiz Telegram Bot.
+                            <small class="text-muted d-block mt-2">Last updated: <span id="last-updated">Loading...</span></small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="dashboard" class="mb-5">
+            <h3 class="mb-4">Dashboard</h3>
+            
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Total Users</h5>
+                            <p class="card-text display-4" id="total-users">-</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Active Users</h5>
+                            <p class="card-text display-4" id="active-users">-</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Total Tests</h5>
+                            <p class="card-text display-4" id="total-tests">-</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Total Referrals</h5>
+                            <p class="card-text display-4" id="total-referrals">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-dark border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Top Test Creators</h5>
+                            <div class="chart-container">
+                                <canvas id="test-creators-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-dark border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">Top Referrers</h5>
+                            <div class="chart-container">
+                                <canvas id="referrers-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="users" class="mb-5">
+            <h3 class="mb-4">User Management</h3>
+            <div class="card bg-dark border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Has Invited</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <tr>
+                                    <td colspan="4" class="text-center">Loading users data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tests" class="mb-5">
+            <h3 class="mb-4">Test Management</h3>
+            <div class="card bg-dark border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Tests Count</th>
+                                    <th>Questions Count</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tests-table-body">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading tests data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="referrals" class="mb-5">
+            <h3 class="mb-4">Referral Network</h3>
+            <div class="card bg-dark border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Referrer</th>
+                                    <th>Referred User</th>
+                                </tr>
+                            </thead>
+                            <tbody id="referrals-table-body">
+                                <tr>
+                                    <td colspan="3" class="text-center">Loading referrals data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="py-4 bg-dark text-light mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">MasterQuiz Bot Dashboard &copy; 2023</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">Powered by <a href="https://telegram.org/bots" target="_blank" class="text-light">Telegram Bots</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

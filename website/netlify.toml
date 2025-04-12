@@ -1,0 +1,18 @@
+[build]
+  command = "pip install -r requirements.txt"
+  publish = "."
+
+[functions]
+  external_node_modules = []
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+[dev]
+  framework = "#custom"
+  command = "python main_app.py"
+  port = 5000
+  targetPort = 5000
